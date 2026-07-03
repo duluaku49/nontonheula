@@ -2,12 +2,12 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "NontonHeula - Nonton Film & Series Gratis",
-  description: "Streaming film dan series terlengkap. K-Drama, C-Drama, Anime, Movies & Series internasional. Gratis!",
-  keywords: "streaming film, nonton gratis, k-drama, c-drama, anime, series, movies",
+  title: "Nonton Heula — Streaming Gratis",
+  description: "Nonton film & series terlengkap. K-Drama, C-Drama, Anime, Movies & Series. Gratis!",
+  keywords: "nonton heula, streaming gratis, k-drama, c-drama, anime, film, series",
   openGraph: {
-    title: "NontonHeula - Nonton Film & Series Gratis",
-    description: "Platform streaming film dan series terlengkap",
+    title: "Nonton Heula — Streaming Gratis",
+    description: "Platform streaming film dan series terlengkap, gratis!",
     type: "website",
   },
 };
@@ -16,14 +16,10 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#0a0a0a",
+  themeColor: "#0f0f13",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id" className="h-full">
       <head>
@@ -35,7 +31,7 @@ export default function RootLayout({
         />
         <script src="https://telegram.org/js/telegram-web-app.js" defer />
       </head>
-      <body className="min-h-full flex flex-col tg-miniapp">
+      <body className="min-h-full flex flex-col">
         {children}
       </body>
     </html>

@@ -1,96 +1,83 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import ContentGrid from "@/components/ContentGrid";
-import { ContentItem } from "@/lib/api";
 
-const CATEGORIES = [
-  { id: "trending", label: "🔥 Trending", active: true },
-  { id: "new", label: "🆕 Terbaru" },
-  { id: "top", label: "⭐ Top Rated" },
-  { id: "series", label: "📺 Series" },
-  { id: "movies", label: "🎞️ Movies" },
-];
-
-const REGIONS = [
-  { id: "korea", label: "🇰🇷 Korea" },
-  { id: "china", label: "🇨🇳 China" },
-  { id: "japan", label: "🇯🇵 Japan" },
-  { id: "thailand", label: "🇹🇭 Thailand" },
+const TABS = [
+  { id: "hero", label: "🔥 Trending" },
+  { id: "newly-added", label: "🆕 Terbaru" },
+  { id: "top-rated", label: "⭐ Top" },
+  { id: "movies", label: "🎬 Film" },
+  { id: "kdrama", label: "🇰🇷 K-Drama" },
+  { id: "cdrama", label: "🇨🇳 C-Drama" },
   { id: "anime", label: "🗾 Anime" },
+  { id: "thai-drama", label: "🇹🇭 Thai" },
+  { id: "action", label: "💥 Action" },
+  { id: "horror", label: "👻 Horror" },
+  { id: "romance", label: "💕 Romance" },
+  { id: "comedy", label: "😂 Comedy" },
 ];
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export default function HomePage() {
-  const [items, setItems] = useState<ContentItem[]>([]);
+  const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("trending");
+  const [activeTab, setActiveTab] = useState("hero");
 
-  useEffect(() => {
-    fetchContent(activeTab);
-  }, [activeTab]);
+  useEffect(() => { load(activeTab); }, [activeTab]);
 
-  async function fetchContent(tab: string) {
+  async function load(tab: string) {
     setLoading(true);
     try {
       const res = await fetch(`/api/content?tab=${tab}`);
       const data = await res.json();
       setItems(data.items || []);
-    } catch {
-      setItems([]);
-    }
+    } catch { setItems([]); }
     setLoading(false);
   }
 
   return (
     <>
       <Navbar />
-      <main className="flex-grow pt-14">
+      <main style={{ paddingTop: 56, minHeight: "100vh" }}>
+
         {/* Hero Banner */}
-        <div className="relative h-64 md:h-96 bg-gradient-to-b from-red-900/20 to-transparent">
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 px-4 pb-6 max-w-7xl mx-auto">
-            <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-2">
-              Nonton<span className="text-red-500">Heula</span> 🍿
-            </h1>
-            <p className="text-gray-400 text-sm md:text-base max-w-lg">
-              Streaming film & series terlengkap. K-Drama, C-Drama, Anime, dan lainnya. Gratis!
-            </p>
+        <div style={{ position: "relative", padding: "48px 16px 32px", maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(108,99,255,0.15)", border: "1px solid rgba(108,99,255,0.3)", borderRadius: 999, padding: "4px 14px", marginBottom: 16 }}>
+            <span style={{ width: 7, height: 7, background: "#6c63ff", borderRadius: "50%", animation: "pulse 2s infinite" }} />
+            <span style={{ fontSize: 12, color: "#6c63ff", fontWeight: 600 }}>STREAMING GRATIS</span>
           </div>
+          <h1 style={{ fontSize: "clamp(28px, 6vw, 52px)", fontWeight: 900, lineHeight: 1.1, marginBottom: 12 }}>
+            Nonton Film &amp; Series
+            <br />
+            <span style={{ background: "linear-gradient(135deg, #6c63ff, #ff6584)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              Tanpa Batas 🍿
+            </span>
+          </h1>
+          <p style={{ color: "#8888aa", fontSize: 15, maxWidth: 500, lineHeight: 1.6 }}>
+            K-Drama, C-Drama, Anime, Film &amp; Series Internasional — semua gratis di Nonton Heula.
+          </p>
         </div>
 
-        {/* Category pills */}
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex overflow-x-auto scrollbar-hide gap-2 pb-2">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveTab(cat.id)}
-                className={`pill ${activeTab === cat.id ? "pill-active" : "pill-inactive"}`}
-              >
-                {cat.label}
-              </button>
-            ))}
-            <div className="w-px h-8 bg-white/10 mx-1 flex-shrink-0 self-center" />
-            {REGIONS.map((reg) => (
-              <button
-                key={reg.id}
-                onClick={() => setActiveTab(reg.id)}
-                className={`pill ${activeTab === reg.id ? "pill-active" : "pill-inactive"}`}
-              >
-                {reg.label}
+        {/* Tabs */}
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 16px 12px" }}>
+          <div className="scrollbar-hide" style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 4 }}>
+            {TABS.map(t => (
+              <button key={t.id} onClick={() => setActiveTab(t.id)}
+                className={`pill ${activeTab === t.id ? "pill-on" : "pill-off"}`}>
+                {t.label}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Content Grid */}
+        {/* Grid */}
         <ContentGrid items={items} loading={loading} />
 
         {/* Footer */}
-        <footer className="border-t border-white/5 mt-12 py-8 text-center text-gray-600 text-xs px-4">
-          <p>© 2026 NontonHeula. Powered by TheMovieBox API.</p>
-          <p className="mt-1">Kami tidak menyimpan file video apapun di server.</p>
+        <footer style={{ borderTop: "1px solid rgba(255,255,255,0.05)", marginTop: 40, padding: "24px 16px", textAlign: "center" }}>
+          <p style={{ fontSize: 12, color: "#555566" }}>© 2026 Nonton Heula. Powered by third-party streaming API.</p>
+          <p style={{ fontSize: 11, color: "#444455", marginTop: 4 }}>Kami tidak menyimpan file video di server kami.</p>
         </footer>
       </main>
     </>

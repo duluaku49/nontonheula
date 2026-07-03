@@ -1,9 +1,7 @@
 "use client";
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Image from "next/image";
 import Link from "next/link";
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export default function ContentCard({ item }: { item: any }) {
   const title = item.title || "Untitled";
@@ -11,53 +9,39 @@ export default function ContentCard({ item }: { item: any }) {
   const rating = item.rating || "";
   const year = item.year || "";
   const type = item.type === "movie" ? "FILM" : item.type === "tv" ? "SERIES" : "";
-  const detailPath = item.detailPath || item.id || "";
+  const detailPath = encodeURIComponent(item.detailPath || item.id || "");
 
   return (
-    <Link href={`/watch/${encodeURIComponent(detailPath)}`} className="group card-hover block">
-      <div className="relative aspect-[2/3] rounded-lg overflow-hidden bg-gray-800">
+    <Link href={`/watch/${detailPath}`} className="card block">
+      <div style={{ position: "relative", borderRadius: 10, overflow: "hidden", background: "#1e1e28", aspectRatio: "2/3" }}>
         {poster ? (
-          <Image
-            src={poster}
-            alt={title}
-            fill
-            sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 16vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-110"
-            unoptimized
-          />
+          <Image src={poster} alt={title} fill sizes="(max-width:640px) 33vw, 20vw"
+            style={{ objectFit: "cover", transition: "transform 0.3s" }} unoptimized />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-gray-600">
-            <svg className="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm0 2v12h16V6H4zm8 2l5 4-5 4V8z" />
-            </svg>
-          </div>
+          <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "#333", fontSize: 32 }}>🎬</div>
         )}
-        
-        {/* Rating badge */}
+
+        {/* Rating */}
         {rating && (
-          <div className="absolute top-2 left-2 bg-black/70 backdrop-blur-sm text-yellow-400 text-xs font-bold px-2 py-0.5 rounded-md">
+          <div style={{ position: "absolute", top: 6, left: 6, background: "rgba(0,0,0,0.75)", backdropFilter: "blur(4px)", borderRadius: 6, padding: "2px 7px", fontSize: 11, fontWeight: 700, color: "#fbbf24" }}>
             ⭐ {rating}
           </div>
         )}
-        
+
         {/* Type badge */}
         {type && (
-          <div className="absolute top-2 right-2 bg-red-600/90 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+          <div style={{ position: "absolute", top: 6, right: 6, background: "linear-gradient(135deg,#6c63ff,#ff6584)", borderRadius: 5, padding: "2px 6px", fontSize: 9, fontWeight: 800, color: "#fff", letterSpacing: "0.5px" }}>
             {type}
           </div>
         )}
-        
-        {/* Bottom gradient */}
-        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/90 to-transparent" />
-        
-        {/* Title overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-2.5">
-          <h3 className="text-white text-xs sm:text-sm font-semibold line-clamp-2 leading-tight">
-            {title}
-          </h3>
-          {year && (
-            <p className="text-gray-400 text-[10px] mt-0.5">{year}</p>
-          )}
+
+        {/* Bottom fade */}
+        <div style={{ position: "absolute", inset: "50% 0 0 0", background: "linear-gradient(to top, rgba(15,15,19,0.97) 0%, transparent 100%)" }} />
+
+        {/* Title */}
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "8px 10px" }}>
+          <p style={{ fontSize: 12, fontWeight: 700, color: "#f0f0f5", lineHeight: 1.3, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{title}</p>
+          {year && <p style={{ fontSize: 10, color: "#8888aa", marginTop: 2 }}>{year}</p>}
         </div>
       </div>
     </Link>

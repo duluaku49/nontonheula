@@ -1,41 +1,30 @@
 "use client";
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import ContentCard from "./ContentCard";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-interface ContentGridProps {
-  items: any[];
-  title?: string;
-  loading?: boolean;
-}
-
-export default function ContentGrid({ items, title, loading }: ContentGridProps) {
-  if (loading) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        {title && <h2 className="text-xl font-bold text-white mb-4">{title}</h2>}
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 md:gap-4">
-          {Array.from({ length: 18 }).map((_, i) => (
-            <div key={i} className="aspect-[2/3] rounded-lg skeleton" />
-          ))}
-        </div>
+export default function ContentGrid({ items, title, loading }: { items: any[], title?: string, loading?: boolean }) {
+  if (loading) return (
+    <div style={{ maxWidth: 1280, margin: "0 auto", padding: "16px" }}>
+      {title && <h2 style={{ fontWeight: 800, fontSize: 18, marginBottom: 14, color: "#f0f0f5" }}>{title}</h2>}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: 12 }}>
+        {Array.from({ length: 18 }).map((_, i) => (
+          <div key={i} className="skeleton" style={{ aspectRatio: "2/3" }} />
+        ))}
       </div>
-    );
-  }
+    </div>
+  );
 
-  if (!items || items.length === 0) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 py-12 text-center">
-        <p className="text-gray-500 text-lg">Tidak ada konten tersedia</p>
-      </div>
-    );
-  }
+  if (!items || items.length === 0) return (
+    <div style={{ textAlign: "center", padding: "60px 16px", color: "#8888aa" }}>
+      <div style={{ fontSize: 48, marginBottom: 12 }}>🎬</div>
+      <p>Tidak ada konten tersedia</p>
+    </div>
+  );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
-      {title && <h2 className="text-xl font-bold text-white mb-4">{title}</h2>}
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 md:gap-4">
+    <div style={{ maxWidth: 1280, margin: "0 auto", padding: "16px" }}>
+      {title && <h2 style={{ fontWeight: 800, fontSize: 18, marginBottom: 14, color: "#f0f0f5" }}>{title}</h2>}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: 12 }}>
         {items.map((item: any, idx: number) => (
           <ContentCard key={item.id || idx} item={item} />
         ))}
